@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard - SANKO CONNECT{% endblock %}
+
 {% block content %}
-<h2>Dashboard</h2>
-<p>ยินดีต้อนรับสู่ SANKO CONNECT</p>
+<div class="container">
+    <div class="hero-box mb-4">
+        <h1 class="mb-3">ยินดีต้อนรับสู่ SANKO CONNECT</h1>
+        <p class="mb-0">เข้าสู่ระบบเรียบร้อยแล้ว</p>
+    </div>
+
+    <div class="card card-box">
+        <div class="card-body">
+            <h4 class="mb-3">ข้อมูลพนักงาน</h4>
+            <p><strong>รหัสพนักงาน:</strong> {{ employee.emp_id }}</p>
+            <p><strong>ชื่อ:</strong> {{ employee.full_name or '-' }}</p>
+            <p><strong>แผนก:</strong> {{ employee.department or '-' }}</p>
+            <p><strong>ตำแหน่ง:</strong> {{ employee.position or '-' }}</p>
+            <p><strong>สถานะ:</strong> {{ employee.status or '-' }}</p>
+        </div>
+    </div>
+</div>
 {% endblock %}
