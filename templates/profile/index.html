@@ -1,1 +1,21 @@
+{% extends "base.html" %}
 
+{% block title %}Profile - SANKO CONNECT{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="section-title">User Profile</h2>
+
+    <div class="card card-box">
+        <div class="card-body">
+            <p><strong>รหัสพนักงาน:</strong> {{ employee.emp_id }}</p>
+            <p><strong>ชื่อ:</strong> {{ employee.full_name or '-' }}</p>
+            <p><strong>อีเมล:</strong> {{ current_user.email }}</p>
+            <p><strong>แผนก:</strong> {{ employee.department or '-' }}</p>
+            <p><strong>ตำแหน่ง:</strong> {{ employee.position or '-' }}</p>
+            <p><strong>สถานะพนักงาน:</strong> {{ employee.status or '-' }}</p>
+            <p><strong>ยืนยันอีเมล:</strong> {{ 'Yes' if current_user.is_verified else 'No' }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
