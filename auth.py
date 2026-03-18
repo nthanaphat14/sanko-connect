@@ -1,5 +1,6 @@
 import secrets
 import os
+import secrets
 from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
@@ -115,6 +116,47 @@ def verify_email(token):
     flash("ยืนยันอีเมลสำเร็จ กรุณาเข้าสู่ระบบ", "success")
     return redirect(url_for("auth.login"))
 
+@auth_bp.route("/resend-verification", methods=["GET", "POST"])
+def resend_verification():
+    if request.method == "POST":
+        emp_id = request.form.get("emp_id", "").strip()
+        email = request.form.get("email", "").strip().lower()
+
+        user = User.query.filter_by(emp_id=emp_id, email=email).first()
+
+        if not user:
+            flash("ไม่พบบัญชีผู้ใช้ตามข้อมูลที่ระบุ", "danger")
+            return redirect(url_for("auth.resend_verification"))
+
+        if user.is_verified:
+            flash("บัญชีนี้ยืนยันอีเมลแล้ว สามารถเข้าสู่ระบบได้เลย", "info")
+            return redirect(url_for("auth.login"))
+
+        token = secrets.token_urlsafe(32)
+        verify = EmailVerificationToken(
+            user_id=user.id,
+            token=token,
+            expires_at=datetime.utcnow() + timedelta(hours=24)
+        )
+        db.session.add(verify)
+        db.session.commit()
+
+        verify_link = build_url(f"/verify-email/{token}")
+        send_email(
+            subject="ส่งอีเมลยืนยันใหม่ - SANKO CONNECT",
+            recipient=user.email,
+            html_body=f"""
+            <p>คุณได้ร้องขอส่งอีเมลยืนยันใหม่</p>
+            <p>กรุณากดลิงก์ด้านล่างเพื่อยืนยันอีเมล:</p>
+            <p><a href="{verify_link}">{verify_link}</a></p>
+            <p>ลิงก์นี้มีอายุ 24 ชั่วโมง</p>
+            """
+        )
+
+        flash("ระบบส่งอีเมลยืนยันใหม่แล้ว กรุณาตรวจสอบอีเมล", "success")
+        return redirect(url_for("auth.login"))
+
+    return render_template("auth/resend_verification.html")
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
