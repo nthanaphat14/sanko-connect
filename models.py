@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = "users"
+    __tablename__ = "connect_users"
 
     id = db.Column(db.Integer, primary_key=True)
     emp_id = db.Column(db.String(50), unique=True, nullable=False, index=True)
@@ -33,10 +33,10 @@ class User(UserMixin, db.Model):
 
 
 class EmailVerificationToken(db.Model):
-    __tablename__ = "email_verification_tokens"
+    __tablename__ = "connect_email_verification_tokens"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("connect_users.id"), nullable=False, index=True)
     token = db.Column(db.String(255), unique=True, nullable=False, index=True)
     expires_at = db.Column(db.DateTime, nullable=False)
     used = db.Column(db.Boolean, default=False, nullable=False)
@@ -44,31 +44,61 @@ class EmailVerificationToken(db.Model):
 
 
 class PasswordResetToken(db.Model):
-    __tablename__ = "password_reset_tokens"
+    __tablename__ = "connect_password_reset_tokens"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("connect_users.id"), nullable=False, index=True)
     token = db.Column(db.String(255), unique=True, nullable=False, index=True)
     expires_at = db.Column(db.DateTime, nullable=False)
     used = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
 
-# -----------------------------
-# Employee master from Training System
-# IMPORTANT:
-# แก้ชื่อ table/field ให้ตรงของจริงใน sanko-training-system
-# -----------------------------
+# Employee table from SANKO TRAINING SYSTEM
 class Employee(db.Model):
-    __tablename__ = "employees"   # <-- แก้ตรงนี้ถ้าตารางจริงไม่ใช่ employees
+    __tablename__ = "employees"
 
     id = db.Column(db.Integer, primary_key=True)
-    emp_id = db.Column(db.String(50), unique=True, nullable=False, index=True)  # <-- ชื่อ field จริง
-    full_name = db.Column(db.String(255), nullable=True)                         # <-- ชื่อ field จริง
-    department = db.Column(db.String(255), nullable=True)                        # <-- ชื่อ field จริง
-    position = db.Column(db.String(255), nullable=True)                          # <-- ชื่อ field จริง
-    status = db.Column(db.String(50), nullable=True)                             # <-- Active / Resigned
-    resign_date = db.Column(db.Date, nullable=True)                              # <-- ชื่อ field จริง
+    no = db.Column(db.Integer, nullable=True)
+
+    # ของจริงใน training-system ชื่อ em_id
+    emp_id = db.Column("em_id", db.String(40), unique=True, nullable=False)
+
+    id_card = db.Column(db.String(60), nullable=True)
+    title_th = db.Column(db.String(50), nullable=True)
+    first_name_th = db.Column(db.String(120), nullable=True)
+    last_name_th = db.Column(db.String(120), nullable=True)
+    title_en = db.Column(db.String(50), nullable=True)
+    first_name_en = db.Column(db.String(120), nullable=True)
+    last_name_en = db.Column(db.String(120), nullable=True)
+
+    position = db.Column(db.String(150), nullable=True)
+    section = db.Column(db.String(150), nullable=True)
+    department = db.Column(db.String(150), nullable=True)
+
+    start_work = db.Column(db.Date, nullable=True)
+
+    # ของจริงใน training-system ชื่อ resign
+    resign_date = db.Column("resign", db.Date, nullable=True)
+
+    status = db.Column(db.String(50), nullable=True)
+    degree = db.Column(db.String(80), nullable=True)
+    major = db.Column(db.String(150), nullable=True)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    @property
+    def full_name(self) -> str:
+        first = (self.first_name_th or "").strip()
+        last = (self.last_name_th or "").strip()
+        return f"{first} {last}".strip()
+
+    @property
+    def full_name_with_prefix(self) -> str:
+        prefix = (self.title_th or "").strip()
+        name = self.full_name
+        return f"{prefix} {name}".strip()
 
     @property
     def can_login(self) -> bool:
