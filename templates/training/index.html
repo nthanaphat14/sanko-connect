@@ -1,1 +1,22 @@
+{% extends "base.html" %}
 
+{% block content %}
+<h2>Training</h2>
+
+<table class="table">
+    <tr>
+        <th>Course</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+
+    {% for t in training_list %}
+    <tr>
+        <td>{{ t.course }}</td>
+        <td>{{ t.date }}</td>
+        <td>{{ t.status }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
