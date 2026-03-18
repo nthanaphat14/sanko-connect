@@ -1,1 +1,54 @@
+{% extends "base.html" %}
 
+{% block title %}Dashboard - SANKO CONNECT{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Hero -->
+    <div class="hero-box mb-4">
+        <h1 class="mb-3">👋 ยินดีต้อนรับ</h1>
+        <p class="mb-0">
+            ระบบ SANKO CONNECT สำหรับจัดการข่าวสาร การอบรม และ E-Learning ภายในองค์กร
+        </p>
+    </div>
+
+    <!-- Section -->
+    <h3 class="section-title">เมนูหลัก</h3>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card card-box h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📰 ข่าวสาร</h5>
+                    <p class="card-text">ดูประกาศและข่าวสำคัญของบริษัท</p>
+                    <a href="/news" class="btn btn-primary btn-sm">เข้าสู่ข่าวสาร</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-box h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📅 Training</h5>
+                    <p class="card-text">ดูตารางอบรมและหลักสูตรต่าง ๆ</p>
+                    <a href="/training" class="btn btn-primary btn-sm">ดูตารางอบรม</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-box h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🎓 E-Learning</h5>
+                    <p class="card-text">เรียนออนไลน์และติดตามความคืบหน้า</p>
+                    <a href="#" class="btn btn-primary btn-sm">เข้าเรียน</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
