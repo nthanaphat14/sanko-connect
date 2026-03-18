@@ -26,7 +26,21 @@ def register():
             flash("กรุณากรอกข้อมูลให้ครบ", "danger")
             return redirect(url_for("auth.register"))
 
+        emp_id_input = request.form.get("emp_id")
+
+        # 🔥 แปลงรหัสพนักงาน
+        emp_id = emp_id_input.strip().upper()
+
+        if emp_id.isdigit():
+            emp_id = f"M{emp_id.zfill(7)}"
+
+        # 🔍 หา employee
         employee = Employee.query.filter_by(emp_id=emp_id).first()
+
+        print("INPUT:", emp_id_input)
+        print("NORMALIZED:", emp_id)
+        print("RESULT:", employee)
+
         if not employee:
             flash("ไม่พบรหัสพนักงานในระบบ", "danger")
             return redirect(url_for("auth.register"))
