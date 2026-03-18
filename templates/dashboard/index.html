@@ -13,8 +13,8 @@
         <div class="card-body">
             <h4 class="mb-3">ข้อมูลพนักงาน</h4>
             <p><strong>รหัสพนักงาน:</strong> {{ employee.emp_id }}</p>
-            <p><strong>ชื่อ:</strong> {{ employee.full_name or '-' }}</p>
-            <p><strong>แผนก:</strong> {{ employee.department or '-' }}</p>
+            <p><strong>ชื่อ:</strong> {{ employee.full_name_with_prefix or employee.full_name or '-' }}</p>
+            <p><strong>แผนก:</strong> {{ employee.department or employee.section or '-' }}</p>
             <p><strong>ตำแหน่ง:</strong> {{ employee.position or '-' }}</p>
             <p><strong>สถานะ:</strong> {{ employee.status or '-' }}</p>
         </div>
